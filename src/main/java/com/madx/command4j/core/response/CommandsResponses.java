@@ -8,10 +8,6 @@ import java.util.stream.Collectors;
 
 import com.madx.command4j.core.model.Profile;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * This class contains a List with all the results produced by a grep task
  * 
@@ -19,16 +15,14 @@ import lombok.Setter;
  * @author Giovanni Gargiulo
  * @author Daniele Maddaluno
  */
-@EqualsAndHashCode(exclude = "executionTime")
 public class CommandsResponses implements Collection<CommandResponse> {
 
 	private final String LINE_SEPARATOR = System.getProperty("line.separator");
 	private final List<CommandResponse> commandResults;
 
-	@Getter
-	@Setter
 	private long executionTime;
 
+	
 	/**
 	 * GlobalGrepResult is a container of different {@link CommandResponse}
 	 * 
@@ -197,4 +191,11 @@ public class CommandsResponses implements Collection<CommandResponse> {
 		return commandResults.toArray(a);
 	}
 
+	public long getExecutionTime() {
+		return executionTime;
+	}
+
+	public void setExecutionTime(long executionTime) {
+		this.executionTime = executionTime;
+	}
 }

@@ -3,10 +3,6 @@ package com.madx.command4j.core.response;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.madx.command4j.core.Command;
@@ -19,20 +15,22 @@ import com.madx.command4j.core.model.Profile;
  * @author Giovanni Gargiulo
  * @author Daniele Maddaluno
  */
-@RequiredArgsConstructor
-@EqualsAndHashCode
 public class CommandResponse {
 
 	private static final Pattern linePattern = Pattern.compile(".*\\r?\\n");
-	@Getter
 	private final Profile profile;
-	@Getter
 	private final Command command;
-	@Getter
 	private final String text;
-	@Getter
 	private final long executionTime;
 
+
+	public CommandResponse(Profile profile, Command command, String text, long executionTime) {
+		this.profile = profile;
+		this.command = command;
+		this.text = text;
+		this.executionTime = executionTime;
+	}
+	
 	/**
 	 * @return the profile name associated with this grep result
 	 */
@@ -116,4 +114,19 @@ public class CommandResponse {
 		return text;
 	}
 
+	public Profile getProfile() {
+		return profile;
+	}
+
+	public Command getCommand() {
+		return command;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public long getExecutionTime() {
+		return executionTime;
+	}
 }

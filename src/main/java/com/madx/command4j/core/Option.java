@@ -5,22 +5,15 @@ import java.lang.reflect.Type;
 
 import com.madx.command4j.core.utils.string.StringSymbol;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-
 /**
  * 
  * @author Daniele Maddaluno
  *
  * @param <T>
  */
-@EqualsAndHashCode
 public abstract class Option<T extends Command> implements Comparable<Option<T>>{
-	@Getter
 	private final String optionCommand;
-	@Getter
 	private final Object optionValue;
-	@Getter
 	private final int executionOrder;
 
 	protected Option(String optionCommand, Object optionValue, int executionOrder) {
@@ -51,6 +44,42 @@ public abstract class Option<T extends Command> implements Comparable<Option<T>>
 	@Override
 	public int compareTo(Option<T> other) {
 		return Integer.compare(this.executionOrder, other.executionOrder);
+	}
+
+	public String getOptionCommand() {
+		return optionCommand;
+	}
+
+	public Object getOptionValue() {
+		return optionValue;
+	}
+
+	public int getExecutionOrder() {
+		return executionOrder;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Option<?> other = (Option<?>) obj;
+		if (executionOrder != other.executionOrder)
+			return false;
+		if (optionCommand == null) {
+			if (other.optionCommand != null)
+				return false;
+		} else if (!optionCommand.equals(other.optionCommand))
+			return false;
+		if (optionValue == null) {
+			if (other.optionValue != null)
+				return false;
+		} else if (!optionValue.equals(other.optionValue))
+			return false;
+		return true;
 	}
 	
 }

@@ -2,8 +2,6 @@ package com.madx.command4j.core.model;
 
 import javax.annotation.concurrent.Immutable;
 
-import lombok.Data;
-
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -14,14 +12,17 @@ import org.apache.commons.lang3.StringUtils;
  * @author Marco Castigliego
  */
 @Immutable
-@Data
 public class Profile {
 
 	private final String name;
 	private final String filePath;
 	private ServerDetails serverDetails;
-	// TODO remove this from hash code for the pooled factory
 	private Integer maxTaskThreads;
+
+	public Profile(String name, String filePath) {
+		this.name = name;
+		this.filePath = filePath;
+	}
 
 	public boolean containsWildcard() {
 		return StringUtils.contains(filePath, "*");
@@ -53,12 +54,72 @@ public class Profile {
 
 	}
 
-	/**
-	 * FIXME manage this max threads managing
-	 * @return
-	 */
 	public Integer getMaxThreads() {
 		return maxTaskThreads;
 	}
 
+	public ServerDetails getServerDetails() {
+		return serverDetails;
+	}
+
+	public void setServerDetails(ServerDetails serverDetails) {
+		this.serverDetails = serverDetails;
+	}
+
+	public Integer getMaxTaskThreads() {
+		return maxTaskThreads;
+	}
+
+	public void setMaxTaskThreads(Integer maxTaskThreads) {
+		this.maxTaskThreads = maxTaskThreads;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	/**
+	 * Hashcode without considering maxTaskThreads
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((filePath == null) ? 0 : filePath.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((serverDetails == null) ? 0 : serverDetails.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Profile other = (Profile) obj;
+		if (filePath == null) {
+			if (other.filePath != null)
+				return false;
+		} else if (!filePath.equals(other.filePath))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (serverDetails == null) {
+			if (other.serverDetails != null)
+				return false;
+		} else if (!serverDetails.equals(other.serverDetails))
+			return false;
+		return true;
+	}
+	
 }
