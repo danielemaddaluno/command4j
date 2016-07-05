@@ -3,6 +3,8 @@ package com.madx.command4j.core;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.madx.command4j.core.utils.string.StringSymbol;
 
 /**
@@ -15,14 +17,24 @@ public abstract class Option<T extends Command> implements Comparable<Option<T>>
 	private final String optionCommand;
 	private final Object optionValue;
 	private final int executionOrder;
+	private boolean isRegex = false;
 
-	protected Option(String optionCommand, Object optionValue, int executionOrder) {
-		if(optionCommand == null || optionCommand.isEmpty()) throw new IllegalArgumentException("The String field is missing (null or empty)");
+	private Option(String optionCommand, Object optionValue, int executionOrder, boolean isRegex) {
+		if(StringUtils.isEmpty(optionCommand) || StringUtils.isBlank(optionCommand)) throw new IllegalArgumentException("The String field is missing (null or empty)");
 		this.optionCommand = optionCommand;
 		this.optionValue = optionValue;
 		this.executionOrder = executionOrder;
+		this.isRegex = isRegex;
 	}
-	
+
+	protected Option(String optionCommand, Object optionValue, int executionOrder) {
+		this(optionCommand, optionValue, executionOrder, false);
+	}
+
+	public boolean containsWildcard() {
+		return isRegex ? StringUtils.contains(this.getOptionCommand(), "*") : false;
+	}
+
 	@SuppressWarnings ("unchecked")
 	public Class<T> getTypeParameterClass(){
 		Type type = getClass().getGenericSuperclass();
@@ -40,7 +52,7 @@ public abstract class Option<T extends Command> implements Comparable<Option<T>>
 		}
 		return stringBuilder.toString();
 	}
-	
+
 	@Override
 	public int compareTo(Option<T> other) {
 		return Integer.compare(this.executionOrder, other.executionOrder);
@@ -81,5 +93,30 @@ public abstract class Option<T extends Command> implements Comparable<Option<T>>
 			return false;
 		return true;
 	}
-	
+
+	/**
+	 * Represents the options that refers generally to any command
+	 * and can be used with all of them indifferently
+	 * @author Daniele Maddaluno
+	 *
+	 */
+	protected static class CommandOption extends Option<Command> {
+		protected CommandOption(String optionCommand, String optionValue, int executionOrder) {
+			super(optionCommand, optionValue, executionOrder);
+		}
+
+		protected CommandOption(String optionCommand, String optionValue) {
+			this(optionCommand, optionValue, 0);
+		}
+
+		protected CommandOption(String optionCommand) {
+			this(optionCommand, null, 0);
+		}
+	}
+
+	protected static class CommandOptionDemux extends Option<Command> {
+		protected CommandOptionDemux(String path, boolean isRegex) {
+			super(path, null, 0, isRegex);
+		}
+	}
 }

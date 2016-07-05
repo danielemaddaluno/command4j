@@ -1,6 +1,7 @@
 package com.madx.command4j.commands.gunzip;
 
 import com.madx.command4j.core.Command;
+import com.madx.command4j.core.Option;
 
 /**
  * {@link Gunzip} is a {@link Command} object that build the command to list files. 
@@ -31,4 +32,22 @@ import com.madx.command4j.core.Command;
  * @author Daniele Maddaluno
  *
  */
-public class Gunzip extends Command {}
+public class Gunzip extends Command {
+	public static class GunzipOption extends Option<Gunzip> {
+		protected GunzipOption(String optionCommand) {
+			super(optionCommand, null, 0);
+		}
+
+		protected GunzipOption(String optionCommand, Object optionValue) {
+			super(optionCommand, optionValue, 0);
+		}
+	}
+
+	/**
+	 * -c, --stdout, --to-stdout write to stdout, keep original files
+	 * @return
+	 */
+	public static Option<Gunzip> onlyMatching() {
+		return new GunzipOption("-c");
+	}
+}

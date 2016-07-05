@@ -27,6 +27,7 @@ import com.madx.command4j.core.utils.thread.ForkController;
  * 
  * @author Marco Castigliego
  * @author Giovanni Gargiulo
+ * @author Daniele Maddaluno
  */
 public class CommandsCallable implements Callable<List<CommandResponse>> {
 

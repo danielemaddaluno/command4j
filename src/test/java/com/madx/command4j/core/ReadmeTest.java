@@ -10,7 +10,6 @@ public class ReadmeTest {
 	public void readme() throws Exception {
 		Profile profile = ProfileBuilder.newBuilder()
 				.name("Local server log")
-				.filePath("/Users/madx/Desktop/asd/s*")
 				.onLocalhost()
 				.build();
 	}

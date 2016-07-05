@@ -10,26 +10,21 @@ import org.apache.commons.lang3.StringUtils;
  * 
  * @author Giovanni Gargiulo
  * @author Marco Castigliego
+ * @author Daniele Maddaluno
  */
 @Immutable
 public class Profile {
 
 	private final String name;
-	private final String filePath;
 	private ServerDetails serverDetails;
 	private Integer maxTaskThreads;
 
-	public Profile(String name, String filePath) {
+	public Profile(String name) {
 		this.name = name;
-		this.filePath = filePath;
 	}
 
-	public boolean containsWildcard() {
-		return StringUtils.contains(filePath, "*");
-	}
-	
-	public static Profile copy(Profile from, String newFilePath){
-		Profile p = new Profile(from.name, newFilePath);
+	public static Profile copy(Profile from){
+		Profile p = new Profile(from.name);
 		p.setServerDetails(from.serverDetails);
 		return p;
 	}
@@ -39,9 +34,6 @@ public class Profile {
 			throw new IllegalArgumentException("Profile name is empty or null");
 		}
 		String suffix = "Validation error for Profile [" + name + "]:";
-		if (StringUtils.isEmpty(filePath) || StringUtils.isBlank(filePath)) {
-			throw new IllegalArgumentException(suffix + "FilePath is empty or null");
-		}
 		if (serverDetails == null) {
 			throw new IllegalArgumentException(suffix + "ServerDetails is empty or null");
 		} else {
@@ -78,18 +70,11 @@ public class Profile {
 		return name;
 	}
 
-	public String getFilePath() {
-		return filePath;
-	}
-
-	/**
-	 * Hashcode without considering maxTaskThreads
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((filePath == null) ? 0 : filePath.hashCode());
+		result = prime * result + ((maxTaskThreads == null) ? 0 : maxTaskThreads.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((serverDetails == null) ? 0 : serverDetails.hashCode());
 		return result;
@@ -104,10 +89,10 @@ public class Profile {
 		if (getClass() != obj.getClass())
 			return false;
 		Profile other = (Profile) obj;
-		if (filePath == null) {
-			if (other.filePath != null)
+		if (maxTaskThreads == null) {
+			if (other.maxTaskThreads != null)
 				return false;
-		} else if (!filePath.equals(other.filePath))
+		} else if (!maxTaskThreads.equals(other.maxTaskThreads))
 			return false;
 		if (name == null) {
 			if (other.name != null)

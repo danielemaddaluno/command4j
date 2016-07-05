@@ -71,7 +71,7 @@ public final class Command4j {
 					results.add(singleGrepResult);
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("Error when executing the GrepTask", e);
+			throw new RuntimeException("Error when executing the CommandTask", e);
 		} finally {
 			clock.stop();
 			results.setExecutionTime(clock.getTime());
