@@ -18,31 +18,31 @@ Command4j is a simple API made to centralize and facilitate the command executio
 ## Profile ##
 In command4j a profile is a command target context.
 The profile contains information such as the name of the file/folder, the host and the credentials to connect to either local or remote machine.
-```
+``` java
 Profile remoteProfile = ProfileBuilder.newBuilder()
-                                     .name("Remote server log")
-                                     .onRemotehost("172.xx.xx.xx")
-                                     .credentials("user", "password")
-                                     .build();
+		.name("Remote server log")
+		.onRemotehost("172.xx.xx.xx")
+		.credentials("user", "password")
+		.build();
 
 Profile localProfile = ProfileBuilder.newBuilder()
-                                     .name("Local server log")
-		                     .onLocalhost()
-		                     .build();
+		.name("Local server log")
+		.onLocalhost()
+		.build();
 
 Profile remoteProfileWithPublicKey = ProfileBuilder.newBuilder()
-		                     .name("Another remote server log")
-		                     .onRemotehost("172.x.x.x")
-		                     .userAuthPrivateKeyLocation("/home/user/.ssh/id_dsa")
-		                     .withUser("user")
-		                     .build();
+		.name("Another remote server log")
+		.onRemotehost("172.x.x.x")
+		.userAuthPrivateKeyLocation("/home/user/.ssh/id_dsa")
+		.withUser("user")
+		.build();
 ```
 
 
 ## Using Command4j to execute some commands ##
 
 You can use Command4j to execute some commands across multiple local/remote servers in an easy and fluent way:
-```
+``` java
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -62,15 +62,15 @@ public class ReadmeTest {
 				.onLocalhost()
 				.build();
 
-		Command command1 = CommandBuilder.
-				command(Ls.class).
-				options(Arrays.asList(Ls.path("/"))).
-				build();
+		Command command1 = CommandBuilder
+				.command(Ls.class)
+				.options(Arrays.asList(Ls.path("/")))
+				.build();
 
-		Command command2 = CommandBuilder.
-				command(Ls.class).
-				options(Arrays.asList(Ls.path("/etc"))).
-				build();
+		Command command2 = CommandBuilder
+				.command(Ls.class)
+				.options(Arrays.asList(Ls.path("/etc")))
+				.build();
 
 		CommandsResponses crs = Command4j.execute(profile, Arrays.asList(command1, command2));
 		crs.stream().forEach(System.out::println);
