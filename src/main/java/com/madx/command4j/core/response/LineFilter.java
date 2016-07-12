@@ -1,17 +1,19 @@
 package com.madx.command4j.core.response;
 
-import lombok.Data;
-
 /**
  * Represents a grep expression
  * @author Daniele Maddaluno
  */
-@Data
 public class LineFilter {
 	
 	private final String text;
 	private final boolean isRegularExpression;
 	
+	private LineFilter(String text, boolean isRegularExpression) {
+		this.text = text;
+		this.isRegularExpression = isRegularExpression;
+	}
+
 	/**
 	 * Regular expression
 	 * 
@@ -30,5 +32,13 @@ public class LineFilter {
 	 */
 	public static LineFilter constantExpression(String text) {
 		return new LineFilter(text, false);
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public boolean isRegularExpression() {
+		return isRegularExpression;
 	}
 }

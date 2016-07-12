@@ -16,6 +16,7 @@ import com.madx.command4j.core.response.CommandResponse;
  * .../server.log*)
  * 
  * @author Marco Castigliego
+ * @author Daniele Maddaluno
  */
 public class CommandCallable implements Callable<CommandResponse> {
 

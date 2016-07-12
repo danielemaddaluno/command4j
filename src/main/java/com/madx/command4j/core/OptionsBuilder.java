@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.madx.command4j.core.Option.CommandOptionDemux;
 import com.madx.command4j.core.utils.string.StringSymbol;
 
 /**
@@ -20,12 +21,12 @@ public class OptionsBuilder<T extends Command> {
 	protected OptionsBuilder(List<Option<? super T>> options){
 		if(options!=null) this.options.addAll(options);
 	}
-	
+
 	@Deprecated
 	public static <V extends Command> OptionsBuilder<V> with(Option<? super V> firstArgument) {
 		return new OptionsBuilder<V>().and(firstArgument);
 	}
-	
+
 	@Deprecated
 	public OptionsBuilder<T> and(Option<? super T> arg) {
 		options.add(arg);
@@ -53,6 +54,12 @@ public class OptionsBuilder<T extends Command> {
 
 	public OptionsBuilder<T> onlySpecificOptions() {
 		return filterOptionsByType(Command.class, false);
+	}
+
+	public boolean containsRegex() {
+		return this.options.
+				parallelStream().
+				anyMatch(o -> o.getClass().equals(CommandOptionDemux.class) && o.containsRegex());
 	}
 
 	private void sort(){
