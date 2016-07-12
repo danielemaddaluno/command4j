@@ -2,8 +2,6 @@ package com.madx.command4j.core.model;
 
 import javax.annotation.concurrent.Immutable;
 
-import lombok.Data;
-
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -12,23 +10,21 @@ import org.apache.commons.lang3.StringUtils;
  * 
  * @author Giovanni Gargiulo
  * @author Marco Castigliego
+ * @author Daniele Maddaluno
  */
 @Immutable
-@Data
 public class Profile {
 
 	private final String name;
-	private final String filePath;
 	private ServerDetails serverDetails;
-	// TODO remove this from hash code for the pooled factory
 	private Integer maxTaskThreads;
 
-	public boolean containsWildcard() {
-		return StringUtils.contains(filePath, "*");
+	public Profile(String name) {
+		this.name = name;
 	}
-	
-	public static Profile copy(Profile from, String newFilePath){
-		Profile p = new Profile(from.name, newFilePath);
+
+	public static Profile copy(Profile from){
+		Profile p = new Profile(from.name);
 		p.setServerDetails(from.serverDetails);
 		return p;
 	}
@@ -38,9 +34,6 @@ public class Profile {
 			throw new IllegalArgumentException("Profile name is empty or null");
 		}
 		String suffix = "Validation error for Profile [" + name + "]:";
-		if (StringUtils.isEmpty(filePath) || StringUtils.isBlank(filePath)) {
-			throw new IllegalArgumentException(suffix + "FilePath is empty or null");
-		}
 		if (serverDetails == null) {
 			throw new IllegalArgumentException(suffix + "ServerDetails is empty or null");
 		} else {
@@ -53,12 +46,65 @@ public class Profile {
 
 	}
 
-	/**
-	 * FIXME manage this max threads managing
-	 * @return
-	 */
 	public Integer getMaxThreads() {
 		return maxTaskThreads;
 	}
 
+	public ServerDetails getServerDetails() {
+		return serverDetails;
+	}
+
+	public void setServerDetails(ServerDetails serverDetails) {
+		this.serverDetails = serverDetails;
+	}
+
+	public Integer getMaxTaskThreads() {
+		return maxTaskThreads;
+	}
+
+	public void setMaxTaskThreads(Integer maxTaskThreads) {
+		this.maxTaskThreads = maxTaskThreads;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((maxTaskThreads == null) ? 0 : maxTaskThreads.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((serverDetails == null) ? 0 : serverDetails.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Profile other = (Profile) obj;
+		if (maxTaskThreads == null) {
+			if (other.maxTaskThreads != null)
+				return false;
+		} else if (!maxTaskThreads.equals(other.maxTaskThreads))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (serverDetails == null) {
+			if (other.serverDetails != null)
+				return false;
+		} else if (!serverDetails.equals(other.serverDetails))
+			return false;
+		return true;
+	}
+	
 }

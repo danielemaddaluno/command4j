@@ -52,16 +52,7 @@ public class ProfileBuilder {
 		 * @param name
 		 *            unique identifier for this profile
 		 */
-		FileStep name(String name);
-	}
-
-	public static interface FileStep {
-		/**
-		 * @param filePath
-		 *            absolute path of where the file to grep exists. Example: "/opt/jboss/server/log/server.log"
-		 * @return
-		 */
-		ServerStep filePath(String name);
+		ServerStep name(String name);
 	}
 
 	public static interface ServerStep {
@@ -144,26 +135,19 @@ public class ProfileBuilder {
 		public Profile build();
 	}
 
-	private static class Steps implements NameStep, FileStep, ServerStep, CredentialsStep, UserAuthPubKeyCredential, BuildStep {
+	private static class Steps implements NameStep, ServerStep, CredentialsStep, UserAuthPubKeyCredential, BuildStep {
 
 		private String name;
 		private String host;
 		private String user;
 		private String password;
-		private String filePath;
 		private Integer port;
 		private String privateKeyLocation;
 		private boolean isPasswordRequired;
 
 		@Override
-		public FileStep name(String name) {
+		public ServerStep name(String name) {
 			this.name = name;
-			return this;
-		}
-
-		@Override
-		public ServerStep filePath(String filePath) {
-			this.filePath = filePath;
 			return this;
 		}
 
@@ -218,13 +202,10 @@ public class ProfileBuilder {
 			if (name == null) {
 				throw new IllegalArgumentException("profile name cannot be null");
 			}
-			if (filePath == null) {
-				throw new IllegalArgumentException("filePath cannot be null");
-			}
 			if (host == null) {
 				throw new IllegalArgumentException("host cannot be null");
 			}
-			Profile profile = new Profile(name, filePath);
+			Profile profile = new Profile(name);
 			ServerDetails serverDetails = new ServerDetails(host);
 			if (!serverDetails.isLocalhost()) {
 				serverDetails.setUser(user);

@@ -7,28 +7,27 @@ import java.util.Arrays;
 import org.junit.Test;
 
 import com.madx.command4j.commands.grep.Grep;
-import com.madx.command4j.commands.grep.GrepOption;
 import com.madx.command4j.commands.ls.Ls;
-import com.madx.command4j.core.Command;
-import com.madx.command4j.core.CommandBuilder;
-import com.madx.command4j.core.model.Profile;
-import com.madx.command4j.core.model.ProfileBuilder;
 
 public class CommandBuilderTest {
 
-	private static Profile profile(){
-		return ProfileBuilder.newBuilder()
-				.name("Local server log")
-				.filePath("/Users/madx/Desktop/asd/s*")
-				.onLocalhost()
-				.build();
+//	private static Profile profile(){
+//		return ProfileBuilder.newBuilder()
+//				.name("Local server log")
+//				.filePath("/Users/madx/Desktop/asd/s*")
+//				.onLocalhost()
+//				.build();
+//	}
+	
+	private static Option<Command> opt(){
+		return Command.path("/Users/madx/Desktop/asd/s*", true);
 	}
 
 	@Test
 	public void compile_simple() throws Exception {
 		Command c = CommandBuilder.
 				command(Grep.class).
-				options(Arrays.asList(GrepOption.filesMatching(), GrepOption.pattern("tutto"), GrepOption.path(profile().getFilePath()))).
+				options(Arrays.asList(Grep.filesMatching(), Grep.pattern("tutto"), opt())).
 				pipe(Ls.class).
 				options().
 				build();
@@ -50,7 +49,7 @@ public class CommandBuilderTest {
 	public void compile_mixed() throws Exception {
 		Command c =CommandBuilder.
 				command(Grep.class).
-				options(Arrays.asList(GrepOption.filesMatching(), GrepOption.pattern("tutto"), Command.keyValue("-b", "40"), GrepOption.path(profile().getFilePath()))).
+				options(Arrays.asList(Grep.filesMatching(), Grep.pattern("tutto"), Command.keyValue("-b", "40"), opt())).
 				pipe(Ls.class).
 				options().
 				build();
@@ -61,7 +60,7 @@ public class CommandBuilderTest {
 	public void compile_pipe_simple() throws Exception {
 		Command c = CommandBuilder.
 				command(Grep.class).
-				options(Arrays.asList(GrepOption.filesMatching(), GrepOption.pattern("tutto"), GrepOption.path(profile().getFilePath()))).
+				options(Arrays.asList(Grep.filesMatching(), Grep.pattern("tutto"), opt())).
 				pipe(Ls.class).
 				options(Arrays.asList(Command.keyValue("-e", "/etc/"))).
 				build();
@@ -72,7 +71,7 @@ public class CommandBuilderTest {
 	public void compile_pipe_generic() throws Exception {
 		Command c = CommandBuilder.
 				command(Grep.class).
-				options(Arrays.asList(GrepOption.filesMatching(), GrepOption.pattern("tutto"), GrepOption.path(profile().getFilePath()))).
+				options(Arrays.asList(Grep.filesMatching(), Grep.pattern("tutto"), opt())).
 				pipe("gen").
 				options(Arrays.asList(Command.keyValue("-e", "/etc/"))).
 				build();

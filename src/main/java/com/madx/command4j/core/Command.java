@@ -2,6 +2,8 @@ package com.madx.command4j.core;
 
 import java.util.Objects;
 
+import com.madx.command4j.core.Option.CommandOption;
+import com.madx.command4j.core.Option.CommandOptionDemux;
 import com.madx.command4j.core.utils.string.StringSymbol;
 
 /**
@@ -68,34 +70,18 @@ public class Command {
 	protected void setOptions(OptionsBuilder<? extends Command> options) {
 		this.options = options;
 	}
-
-	/**
-	 * COMMAND OPTION SECTION
-	 * COMMAND OPTION SECTION
-	 * COMMAND OPTION SECTION
-	 */
 	
 	/**
-	 * Represents the options that refers generally to any command
-	 * and can be used with all of them indifferently
-	 * @author Daniele Maddaluno
-	 *
+	 * Checks if the command contains a regex inside the options
+	 * @return
 	 */
-	private static class CommandOption extends Option<Command> {
-
-		private CommandOption(String optionCommand, String optionValue, int executionOrder) {
-			super(optionCommand, optionValue, executionOrder);
-		}
-		
-		private CommandOption(String optionCommand, String optionValue) {
-			this(optionCommand, optionValue, 0);
-		}
-		
-		private CommandOption(String optionCommand) {
-			this(optionCommand, null, 0);
-		}
+	public boolean containsRegex(){
+		boolean currentContainsRegex = this.options != null ? this.options.containsRegex() : false;
+		if(currentContainsRegex) return true;
+		if(this.previousCommand!=null) return this.previousCommand.containsRegex();
+		return false;
 	}
-
+	
 	public static Option<Command> text(String text) {
 		return new CommandOption(text);
 	}
@@ -110,5 +96,13 @@ public class Command {
 
 	public static Option<Command> version() {
 		return new CommandOption("--version");
+	}
+	
+	public static Option<Command> path(String path) {
+		return new CommandOptionDemux(path, false);
+	}
+	
+	public static Option<Command> path(String path, boolean isRegex) {
+		return new CommandOptionDemux(path, isRegex);
 	}
 }

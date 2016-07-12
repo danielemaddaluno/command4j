@@ -9,11 +9,11 @@ import com.madx.command4j.core.utils.string.StringSymbol;
  *
  */
 public class Pipe extends Command {
-	
+
 	public Pipe(){
 		super(StringSymbol.PIPE.toString());
 	}
-	
+
 	public Pipe(Command previousCommand){
 		super(StringSymbol.PIPE.toString(), previousCommand);
 	}
