@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.madx.command4j.core.model.Profile;
 
@@ -19,9 +20,11 @@ public class CommandsResponses implements Collection<CommandResponse> {
 
 	private final String LINE_SEPARATOR = System.getProperty("line.separator");
 	private final List<CommandResponse> commandResults;
-
 	private long executionTime;
-
+	
+	public Stream<CommandResponse> stream() {
+        return commandResults.stream();
+    }
 	
 	/**
 	 * GlobalGrepResult is a container of different {@link CommandResponse}

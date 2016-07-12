@@ -31,7 +31,7 @@ public abstract class Option<T extends Command> implements Comparable<Option<T>>
 		this(optionCommand, optionValue, executionOrder, false);
 	}
 
-	public boolean containsWildcard() {
+	public boolean containsRegex() {
 		return isRegex ? StringUtils.contains(this.getOptionCommand(), "*") : false;
 	}
 

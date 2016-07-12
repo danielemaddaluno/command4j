@@ -33,20 +33,20 @@ public final class Command4j {
 		this.profiles = ImmutableList.copyOf(profiles);
 	}
 
-	public static CommandsResponses command(List<Profile> profiles, List<Command> commands) {
+	public static CommandsResponses execute(List<Profile> profiles, List<Command> commands) {
 		return new Command4j(profiles, commands).execute();
 	}
 
-	public static CommandsResponses command(Profile profile, List<Command> commands) {
-		return command(Collections.singletonList(profile), commands);
+	public static CommandsResponses execute(Profile profile, List<Command> commands) {
+		return execute(Collections.singletonList(profile), commands);
 	}
 
-	public static CommandsResponses command(List<Profile> profiles, Command command) {
-		return command(profiles, Collections.singletonList(command));
+	public static CommandsResponses execute(List<Profile> profiles, Command command) {
+		return execute(profiles, Collections.singletonList(command));
 	}
 
-	public static CommandsResponses command(Profile profile, Command command) {
-		return command(Collections.singletonList(profile), Collections.singletonList(command));
+	public static CommandsResponses execute(Profile profile, Command command) {
+		return execute(Collections.singletonList(profile), Collections.singletonList(command));
 	}
 
 	private CommandsResponses execute() {
