@@ -1,5 +1,6 @@
 package com.madx.command4j.core;
 
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -13,7 +14,9 @@ import com.madx.command4j.core.utils.string.StringSymbol;
  *
  * @param <T>
  */
-public abstract class Option<T extends Command> implements Comparable<Option<T>>{
+public abstract class Option<T extends Command> implements Comparable<Option<T>>, Serializable{
+
+	private static final long serialVersionUID = -3560165931981379751L;
 	private final String optionCommand;
 	private final Object optionValue;
 	private final int executionOrder;
@@ -81,6 +84,8 @@ public abstract class Option<T extends Command> implements Comparable<Option<T>>
 		Option<?> other = (Option<?>) obj;
 		if (executionOrder != other.executionOrder)
 			return false;
+		if (isRegex != other.isRegex)
+			return false;
 		if (optionCommand == null) {
 			if (other.optionCommand != null)
 				return false;
@@ -101,6 +106,8 @@ public abstract class Option<T extends Command> implements Comparable<Option<T>>
 	 *
 	 */
 	protected static class CommandOption extends Option<Command> {
+		private static final long serialVersionUID = 1L;
+		
 		protected CommandOption(String optionCommand, String optionValue, int executionOrder) {
 			super(optionCommand, optionValue, executionOrder);
 		}
@@ -115,6 +122,8 @@ public abstract class Option<T extends Command> implements Comparable<Option<T>>
 	}
 
 	protected static class CommandOptionDemux extends Option<Command> {
+		private static final long serialVersionUID = 1L;
+		
 		protected CommandOptionDemux(String path, boolean isRegex) {
 			super(path, null, 0, isRegex);
 		}

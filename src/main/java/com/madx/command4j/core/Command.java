@@ -1,5 +1,8 @@
 package com.madx.command4j.core;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import com.madx.command4j.core.Option.CommandOption;
@@ -10,7 +13,8 @@ import com.madx.command4j.core.utils.string.StringSymbol;
  * Base interface all the Unix Command have to implement so to be executable.
  * @author Daniele Maddaluno
  */
-public class Command {
+public class Command implements Serializable{
+	private static final long serialVersionUID = -8286450370801369501L;
 
 	protected final String name;
 	protected OptionsBuilder<? extends Command> options;
@@ -19,16 +23,16 @@ public class Command {
 	protected Command(){
 		this(null, null);
 	}
-	
+
 	protected Command(String name){
 		this(name, null);
 	}
-	
+
 	protected Command(String name, Command previousCommand) {
 		this.name = (name!=null) ? name : this.getClass().getSimpleName().toLowerCase();
 		this.previousCommand = previousCommand;
 	}
-	
+
 	protected String getCommandName() {
 		return name;
 	}
@@ -70,7 +74,7 @@ public class Command {
 	protected void setOptions(OptionsBuilder<? extends Command> options) {
 		this.options = options;
 	}
-	
+
 	/**
 	 * Checks if the command contains a regex inside the options
 	 * @return
@@ -81,7 +85,25 @@ public class Command {
 		if(this.previousCommand!=null) return this.previousCommand.containsRegex();
 		return false;
 	}
+
+	/**
+	 * Recursive function to take the regular expression options contained in the 
+	 * command in the order of their appearance inside the command
+	 * @return
+	 */
+	public List<CommandOptionDemux> containedRegex(){
+		List<CommandOptionDemux> regexOptions = new ArrayList<CommandOptionDemux>();
+		if(this.previousCommand != null) regexOptions.addAll(this.previousCommand.containedRegex());
+		if(this.options!=null) regexOptions.addAll(this.options.containedRegex());
+		return regexOptions;
+	}
 	
+	public Command replaceRegex(List<Option<Command>> optionsToReplace) {
+		if(this.previousCommand != null) this.previousCommand.replaceRegex(optionsToReplace);
+		if(this.options!=null) this.options = this.options.replaceRegex(optionsToReplace);
+		return this;
+	}
+
 	public static Option<Command> text(String text) {
 		return new CommandOption(text);
 	}
@@ -97,11 +119,11 @@ public class Command {
 	public static Option<Command> version() {
 		return new CommandOption("--version");
 	}
-	
+
 	public static Option<Command> path(String path) {
 		return new CommandOptionDemux(path, false);
 	}
-	
+
 	public static Option<Command> path(String path, boolean isRegex) {
 		return new CommandOptionDemux(path, isRegex);
 	}

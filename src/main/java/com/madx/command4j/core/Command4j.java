@@ -65,10 +65,10 @@ public final class Command4j {
 				tasks.add(new CommandsCallable(profile, commands));
 			}
 
-			List<Future<List<CommandResponse>>> grepTaskFutures = executorService.invokeAll(tasks);
-			for (Future<List<CommandResponse>> future : grepTaskFutures) {
-				for (CommandResponse singleGrepResult : future.get())
-					results.add(singleGrepResult);
+			List<Future<List<CommandResponse>>> profilesFuture = executorService.invokeAll(tasks);
+			for (Future<List<CommandResponse>> profileFuture : profilesFuture) {
+				for (CommandResponse commandResponse : profileFuture.get())
+					results.add(commandResponse);
 			}
 		} catch (Exception e) {
 			throw new RuntimeException("Error when executing the CommandTask", e);

@@ -1,7 +1,5 @@
 package com.madx.command4j.core.model;
 
-import javax.annotation.concurrent.Immutable;
-
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -12,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
  * @author Marco Castigliego
  * @author Daniele Maddaluno
  */
-@Immutable
 public class Profile {
 
 	private final String name;
