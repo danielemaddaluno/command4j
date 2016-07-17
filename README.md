@@ -77,3 +77,23 @@ public class ReadmeTest {
 	}
 }
 ```
+
+If you need to execute a command upon some files identified by a regex you can use the `Command.path` option and set true the regex boolean as shown below.
+It will demultiplex automatically the command for you (to test it simply try to run the test class inside the library!).
+
+``` java
+Profile profile = ProfileBuilder.newBuilder()
+		.name("Local server log")
+		.onLocalhost()
+		.build();
+
+File f = new File("src/test/resources/regex");
+
+Command command = CommandBuilder
+		.command(Grep.class)
+		.options(Arrays.asList(Grep.pattern("ciao"), Grep.path(f.getAbsolutePath() + "/t*e*", true)))
+		.build();
+
+CommandsResponses crs = Command4j.execute(profile, command);
+crs.stream().forEach(System.out::println);
+```

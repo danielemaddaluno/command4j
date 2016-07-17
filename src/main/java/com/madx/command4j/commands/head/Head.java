@@ -9,7 +9,10 @@ import com.madx.command4j.core.Option;
  * @author Daniele Maddaluno
  */
 public class Head extends Command {
+	private static final long serialVersionUID = 1L;
+	
 	public static class HeadOption extends Option<Head> {
+		private static final long serialVersionUID = 1L;
 
 		protected HeadOption(String optionCommand, Object optionValue) {
 			super(optionCommand, optionValue, 0);

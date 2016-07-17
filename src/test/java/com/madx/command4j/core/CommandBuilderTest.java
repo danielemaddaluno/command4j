@@ -14,13 +14,13 @@ public class CommandBuilderTest {
 //	private static Profile profile(){
 //		return ProfileBuilder.newBuilder()
 //				.name("Local server log")
-//				.filePath("/Users/madx/Desktop/asd/s*")
+//				.filePath("/Users/madx/Desktop/asd/sym")
 //				.onLocalhost()
 //				.build();
 //	}
 	
 	private static Option<Command> opt(){
-		return Command.path("/Users/madx/Desktop/asd/s*", true);
+		return Command.path("/Users/madx/Desktop/asd/sym");
 	}
 
 	@Test
@@ -31,7 +31,7 @@ public class CommandBuilderTest {
 				pipe(Ls.class).
 				options().
 				build();
-		assertEquals("grep -l 'tutto' /Users/madx/Desktop/asd/s* | ls ", c.toString());
+		assertEquals("grep -l 'tutto' /Users/madx/Desktop/asd/sym | ls ", c.toString());
 	}
 
 	@Test
@@ -53,7 +53,7 @@ public class CommandBuilderTest {
 				pipe(Ls.class).
 				options().
 				build();
-		assertEquals("grep -l 'tutto' -b 40 /Users/madx/Desktop/asd/s* | ls ", c.toString());
+		assertEquals("grep -l 'tutto' -b 40 /Users/madx/Desktop/asd/sym | ls ", c.toString());
 	}
 
 	@Test
@@ -64,7 +64,7 @@ public class CommandBuilderTest {
 				pipe(Ls.class).
 				options(Arrays.asList(Command.keyValue("-e", "/etc/"))).
 				build();
-		assertEquals("grep -l 'tutto' /Users/madx/Desktop/asd/s* | ls -e /etc/ ", c.toString());
+		assertEquals("grep -l 'tutto' /Users/madx/Desktop/asd/sym | ls -e /etc/ ", c.toString());
 	}
 
 	@Test
@@ -75,7 +75,7 @@ public class CommandBuilderTest {
 				pipe("gen").
 				options(Arrays.asList(Command.keyValue("-e", "/etc/"))).
 				build();
-		assertEquals("grep -l 'tutto' /Users/madx/Desktop/asd/s* | gen -e /etc/ ", c.toString());
+		assertEquals("grep -l 'tutto' /Users/madx/Desktop/asd/sym | gen -e /etc/ ", c.toString());
 	}
 	
 }

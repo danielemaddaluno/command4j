@@ -33,7 +33,11 @@ import com.madx.command4j.core.Option;
  *
  */
 public class Gunzip extends Command {
+	private static final long serialVersionUID = 1L;
+	
 	public static class GunzipOption extends Option<Gunzip> {
+		private static final long serialVersionUID = 1L;
+		
 		protected GunzipOption(String optionCommand) {
 			super(optionCommand, null, 0);
 		}
@@ -47,7 +51,7 @@ public class Gunzip extends Command {
 	 * -c, --stdout, --to-stdout write to stdout, keep original files
 	 * @return
 	 */
-	public static Option<Gunzip> onlyMatching() {
+	public static Option<Gunzip> consoleOut() {
 		return new GunzipOption("-c");
 	}
 }

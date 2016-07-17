@@ -1,9 +1,12 @@
 package com.madx.command4j.core;
 
+import java.io.File;
 import java.util.Arrays;
 
 import org.junit.Test;
 
+import com.madx.command4j.commands.grep.Grep;
+import com.madx.command4j.commands.gunzip.Gunzip;
 import com.madx.command4j.commands.ls.Ls;
 import com.madx.command4j.core.model.Profile;
 import com.madx.command4j.core.model.ProfileBuilder;
@@ -45,11 +48,36 @@ public class ReadmeTest {
 				.build();
 
 		Command command2 = CommandBuilder
-				.command(Ls.class)
-				.options(Arrays.asList(Ls.path("/etc")))
+				.command(Gunzip.class)
+				.options(
+						Arrays.asList(
+								Gunzip.consoleOut(), 
+								Gunzip.path("/Users/madx/Documents/Workspace/Command4j/src/test/resources/grep/local.txt.gz")
+								)
+						)
 				.build();
 
+		System.out.println(command2.toString());
+
 		CommandsResponses crs = Command4j.execute(profile, Arrays.asList(command1, command2));
+		crs.stream().forEach(System.out::println);
+	}
+
+	@Test
+	public void readme_regex() throws Exception {
+		Profile profile = ProfileBuilder.newBuilder()
+				.name("Local server log")
+				.onLocalhost()
+				.build();
+
+		File f = new File("src/test/resources/regex");
+
+		Command command = CommandBuilder
+				.command(Grep.class)
+				.options(Arrays.asList(Grep.pattern("ciao"), Grep.path(f.getAbsolutePath() + "/t*e*", true)))
+				.build();
+
+		CommandsResponses crs = Command4j.execute(profile, command);
 		crs.stream().forEach(System.out::println);
 	}
 }

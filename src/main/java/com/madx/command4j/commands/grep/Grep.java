@@ -8,7 +8,11 @@ import com.madx.command4j.core.utils.string.StringSymbol;
  * @author Daniele Maddaluno
  */
 public class Grep extends Command {
+	private static final long serialVersionUID = 1L;
+	
 	public static class GrepOption extends Option<Grep> {
+		private static final long serialVersionUID = 1L;
+		
 		protected GrepOption(String optionCommand) {
 			super(optionCommand, null, 0);
 		}

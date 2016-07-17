@@ -9,9 +9,11 @@ import com.madx.command4j.core.Option;
  * @author Daniele Maddaluno
  */
 public class Tail extends Command {
-
+	private static final long serialVersionUID = 1L;
+	
 	public static class TailOption extends Option<Tail> {
-
+		private static final long serialVersionUID = 1L;
+		
 		protected TailOption(String optionCommand, Object optionValue) {
 			super(optionCommand, optionValue, 0);
 		}

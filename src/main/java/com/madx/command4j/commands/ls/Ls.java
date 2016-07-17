@@ -11,8 +11,11 @@ import com.madx.command4j.core.Option;
  * @author Daniele Maddaluno
  */
 public class Ls extends Command {
+	private static final long serialVersionUID = 1L;
 
 	public static class LsOption extends Option<Ls> {
+		private static final long serialVersionUID = 1L;
+		
 		protected LsOption(String optionCommand) {
 			super(optionCommand, null, 0);
 		}
