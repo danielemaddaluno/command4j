@@ -10,12 +10,13 @@ import java.util.concurrent.Executors;
 
 import com.madx.command4j.commands.ls.Ls;
 import com.madx.command4j.core.Command;
+import com.madx.command4j.core.CommandDemux;
 import com.madx.command4j.core.model.Profile;
 import com.madx.command4j.core.response.CommandResponse;
 import com.madx.command4j.core.utils.thread.ForkController;
 
 /**
- * Callable class used to run {@link CommandLauncher}s. When called:
+ * Callable class used to run {@link Command}s. When called:
  * <ol>
  * <li>Initialises the commandExecutor</li>
  * <li>Uses the {@link Ls} to create a list of files in case a wildcard is used. For instance using server.log* can return more files such as
@@ -40,24 +41,34 @@ public class CommandsCallable implements Callable<List<CommandResponse>> {
 	}
 
 	@Override
-	public List<CommandResponse> call() {
+	public List<CommandResponse> call() throws Exception {
 		List<CommandResponse> results = new ArrayList<CommandResponse>();
-		ExecutorService executorService = null;
-		CompletionService<CommandResponse> completionService = null;
-		try {
-			executorService = Executors.newFixedThreadPool(ForkController.maxCommandTaskThreads(profile, commands.size()));
-			completionService = new ExecutorCompletionService<CommandResponse>(executorService);
-			for (Command command : commands) {
-				completionService.submit(new CommandCallable(profile, command));
-			}
-			for (int i = 0; i < commands.size(); i++) {
-				results.add(completionService.take().get());
-			}
-		} catch (Exception e) {
-			throw new RuntimeException("Error when executing the CommandLauncher", e);
-		} finally {
-			if (executorService != null) {
-				executorService.shutdownNow();
+
+		for(Command command : commands){
+			// if the command does not contain a regex simply execute it synchonously
+			if(!command.containsRegex()){
+				results.add(new CommandCallable(profile, command).call());
+			// otherwise split the command in all the commands from regex and execute all the commands
+			} else {
+				List<Command> regexCommands = CommandDemux.commandsDemux(profile, command);
+				ExecutorService executorService = null;
+				CompletionService<CommandResponse> completionService = null;
+				try {
+					executorService = Executors.newFixedThreadPool(ForkController.maxCommandTaskThreads(profile, regexCommands.size()));
+					completionService = new ExecutorCompletionService<CommandResponse>(executorService);
+					for (Command regexCommand : regexCommands) {
+						completionService.submit(new CommandCallable(profile, regexCommand));
+					}
+					for (int i = 0; i < regexCommands.size(); i++) {
+						results.add(completionService.take().get());
+					}
+				} catch (Exception e) {
+					throw new RuntimeException("Error when executing the CommandLauncher", e);
+				} finally {
+					if (executorService != null) {
+						executorService.shutdownNow();
+					}
+				}
 			}
 		}
 		return results;

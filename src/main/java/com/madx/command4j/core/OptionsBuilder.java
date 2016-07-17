@@ -3,6 +3,7 @@ package com.madx.command4j.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.madx.command4j.core.Option.CommandOptionDemux;
@@ -56,10 +57,20 @@ public class OptionsBuilder<T extends Command> {
 		return filterOptionsByType(Command.class, false);
 	}
 
+	private Predicate<? super Option<? super T>> isRegex = o -> o.getClass().equals(CommandOptionDemux.class) && o.containsRegex();
+	
 	public boolean containsRegex() {
 		return this.options.
 				parallelStream().
-				anyMatch(o -> o.getClass().equals(CommandOptionDemux.class) && o.containsRegex());
+				anyMatch(isRegex);
+	}
+
+	public List<CommandOptionDemux> containedRegex(){
+		return this.options.
+				stream().
+				filter(isRegex).
+				map(CommandOptionDemux.class::cast).
+				collect(Collectors.toList());
 	}
 
 	private void sort(){

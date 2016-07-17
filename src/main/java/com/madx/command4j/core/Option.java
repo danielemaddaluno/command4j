@@ -81,6 +81,8 @@ public abstract class Option<T extends Command> implements Comparable<Option<T>>
 		Option<?> other = (Option<?>) obj;
 		if (executionOrder != other.executionOrder)
 			return false;
+		if (isRegex != other.isRegex)
+			return false;
 		if (optionCommand == null) {
 			if (other.optionCommand != null)
 				return false;

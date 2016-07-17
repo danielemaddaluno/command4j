@@ -47,7 +47,7 @@ public class Gunzip extends Command {
 	 * -c, --stdout, --to-stdout write to stdout, keep original files
 	 * @return
 	 */
-	public static Option<Gunzip> onlyMatching() {
+	public static Option<Gunzip> consoleOut() {
 		return new GunzipOption("-c");
 	}
 }
