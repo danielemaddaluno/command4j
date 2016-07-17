@@ -13,7 +13,6 @@ import com.madx.command4j.core.Command;
 import com.madx.command4j.core.CommandDemux;
 import com.madx.command4j.core.model.Profile;
 import com.madx.command4j.core.response.CommandResponse;
-import com.madx.command4j.core.utils.thread.ForkController;
 
 /**
  * Callable class used to run {@link Command}s. When called:
@@ -54,7 +53,7 @@ public class CommandsCallable implements Callable<List<CommandResponse>> {
 				ExecutorService executorService = null;
 				CompletionService<CommandResponse> completionService = null;
 				try {
-					executorService = Executors.newFixedThreadPool(ForkController.maxCommandTaskThreads(profile, regexCommands.size()));
+					executorService = Executors.newFixedThreadPool(1); // FIXME correct with something like: Executors.newFixedThreadPool(ForkController.maxCommandTaskThreads(profile, regexCommands.size()));
 					completionService = new ExecutorCompletionService<CommandResponse>(executorService);
 					for (Command regexCommand : regexCommands) {
 						completionService.submit(new CommandCallable(profile, regexCommand));

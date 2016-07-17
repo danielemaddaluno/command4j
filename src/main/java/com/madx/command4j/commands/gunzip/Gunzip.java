@@ -33,7 +33,11 @@ import com.madx.command4j.core.Option;
  *
  */
 public class Gunzip extends Command {
+	private static final long serialVersionUID = 1L;
+	
 	public static class GunzipOption extends Option<Gunzip> {
+		private static final long serialVersionUID = 1L;
+		
 		protected GunzipOption(String optionCommand) {
 			super(optionCommand, null, 0);
 		}

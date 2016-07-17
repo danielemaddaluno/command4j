@@ -9,6 +9,7 @@ import com.madx.command4j.core.utils.string.StringSymbol;
  *
  */
 public class Pipe extends Command {
+	private static final long serialVersionUID = 1L;
 
 	public Pipe(){
 		super(StringSymbol.PIPE.toString());

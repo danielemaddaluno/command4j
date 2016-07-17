@@ -1,8 +1,10 @@
 package com.madx.command4j.core;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -13,8 +15,9 @@ import com.madx.command4j.core.utils.string.StringSymbol;
  * @author Daniele Maddaluno
  * @param <T>
  */
-public class OptionsBuilder<T extends Command> {
+public class OptionsBuilder<T extends Command> implements Serializable {
 
+	private static final long serialVersionUID = 8774926070054623578L;
 	private final List<Option<? super T>> options = new ArrayList<Option<? super T>>();
 
 	protected OptionsBuilder(){}
@@ -57,20 +60,31 @@ public class OptionsBuilder<T extends Command> {
 		return filterOptionsByType(Command.class, false);
 	}
 
-	private Predicate<? super Option<? super T>> isRegex = o -> o.getClass().equals(CommandOptionDemux.class) && o.containsRegex();
+	private Predicate<? super Option<? super T>> isRegex(){
+		return o -> o.getClass().equals(CommandOptionDemux.class) && o.containsRegex();
+	}
 	
 	public boolean containsRegex() {
 		return this.options.
 				parallelStream().
-				anyMatch(isRegex);
+				anyMatch(isRegex());
 	}
 
 	public List<CommandOptionDemux> containedRegex(){
 		return this.options.
 				stream().
-				filter(isRegex).
+				filter(isRegex()).
 				map(CommandOptionDemux.class::cast).
 				collect(Collectors.toList());
+	}
+
+	public OptionsBuilder<T> replaceRegex(List<Option<Command>> optionsToReplace){
+		Function<Option<? super T>, Option<? super T>> replaceFunction = o -> isRegex().test(o) ? optionsToReplace.remove(0) : o;
+		List<Option<? super T>> options = this.options.
+				stream().
+				map(replaceFunction).
+				collect(Collectors.toList());
+		return new OptionsBuilder<T>(options);
 	}
 
 	private void sort(){
